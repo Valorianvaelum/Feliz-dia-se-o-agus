@@ -40,6 +40,7 @@ jobs:
               '  <script src="./assets/visual-pass-3-atmosphere.js"></script>\n',
               '  <script src="./assets/visual-pass-3-depth.js"></script>\n',
               '  <script src="./assets/visual-pass-3-finale.js"></script>\n',
+              '  <script src="./assets/experience-polish.js"></script>\n',
           ]
           for tag in tags:
               src = tag.split('src="', 1)[1].split('"', 1)[0]
