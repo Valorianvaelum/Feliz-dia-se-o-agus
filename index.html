@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f2c94c" />
+  <meta name="description" content="Un pequeño regalo para la seño Agus por el Día del Maestro." />
+  <title>Feliz día, seño Agus</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <style>
+    :root {
+      --sky-top: #75b9eb;
+      --sky-bottom: #d8efff;
+      --sun: #ffd86b;
+      --green-deep: #183f2a;
+      --green: #2f6b3e;
+      --green-soft: #7ca05a;
+      --petal: #f7bd2a;
+      --petal-light: #ffd95b;
+      --center: #59341c;
+      --cream: #fffaf0;
+      --ink: #25261f;
+      --glass: rgba(255, 250, 240, 0.76);
+      --shadow: 0 24px 70px rgba(40, 54, 32, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--sky-bottom);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 34%, #b8d57e 62%, #6c964f 100%);
+    }
+
+    button, a { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .sky-glow {
+      position: absolute;
+      width: min(62vw, 860px);
+      aspect-ratio: 1;
+      left: 50%;
+      top: -28vw;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 238, 173, .84) 0%, rgba(255, 230, 147, .28) 46%, transparent 72%);
+      filter: blur(12px);
+    }
+
+    .cloud {
+      position: absolute;
+      width: 18rem;
+      height: 5rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.48);
+      filter: blur(2px);
+      opacity: .78;
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: inherit;
+    }
+
+    .cloud::before { width: 7rem; height: 7rem; left: 2.2rem; bottom: 0; }
+    .cloud::after { width: 9rem; height: 9rem; right: 2rem; bottom: -.4rem; }
+
+    .cloud-a { top: 13%; left: -5%; transform: scale(.75); }
+    .cloud-b { top: 22%; right: -8%; transform: scale(1.05); opacity: .54; }
+
+    .hill {
+      position: absolute;
+      left: -12vw;
+      right: -12vw;
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+
+    .hill-back {
+      height: 42vh;
+      bottom: -17vh;
+      background: #8bad60;
+      transform: rotate(-2deg);
+    }
+
+    .hill-front {
+      height: 36vh;
+      bottom: -18vh;
+      background: #5d8a4b;
+      transform: rotate(3deg);
+    }
+
+    .field {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 100%;
+    }
+
+    .sunflower {
+      --scale: 1;
+      --stem-h: 180px;
+      position: absolute;
+      width: 64px;
+      height: calc(var(--stem-h) + 64px);
+      transform-origin: 50% 100%;
+      transform: translate(-50%, 0) scale(var(--scale));
+      will-change: transform;
+    }
+
+    .stem {
+      position: absolute;
+      width: 8px;
+      height: var(--stem-h);
+      left: 28px;
+      bottom: 0;
+      border-radius: 9px;
+      background: linear-gradient(90deg, #355d2f 0%, #5f8a43 55%, #355d2f 100%);
+      box-shadow: inset 1px 0 rgba(255,255,255,.15);
+      transform-origin: 50% 100%;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 34px;
+      height: 18px;
+      top: 46%;
+      border-radius: 100% 0 100% 0;
+      background: #5f8e45;
+      transform-origin: 0 50%;
+    }
+
+    .leaf.left { left: 28px; transform: rotate(-145deg); }
+    .leaf.right { right: 28px; transform: rotate(-35deg) scaleX(-1); }
+
+    .flower-head {
+      position: absolute;
+      width: 62px;
+      height: 62px;
+      left: 1px;
+      top: 0;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .petal {
+      position: absolute;
+      width: 17px;
+      height: 34px;
+      left: 22.5px;
+      top: -3px;
+      border-radius: 80% 80% 45% 45%;
+      transform-origin: 50% 34px;
+      background: linear-gradient(90deg, #dfa61d 0%, var(--petal-light) 55%, #e7a91f 100%);
+      box-shadow: inset 0 0 4px rgba(255,255,255,.25);
+    }
+
+    .flower-center {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      left: 16px;
+      top: 16px;
+      background:
+        radial-gradient(circle at 30% 30%, #8d5a29 0 8%, transparent 9%),
+        radial-gradient(circle at 70% 62%, #7d4b23 0 7%, transparent 8%),
+        radial-gradient(circle at 45% 74%, #9a642c 0 7%, transparent 8%),
+        radial-gradient(circle, #72451f 0%, var(--center) 72%);
+      border: 3px solid #7b4b22;
+      box-shadow: 0 0 0 2px rgba(238,178,39,.4);
+      z-index: 3;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+
+    .intro {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 32px 20px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .intro-card {
+      width: min(760px, 100%);
+      text-align: center;
+      padding: clamp(28px, 6vw, 64px);
+      border: 1px solid rgba(255,255,255,.6);
+      border-radius: 36px;
+      background: rgba(255, 250, 240, .68);
+      backdrop-filter: blur(18px) saturate(1.15);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: .78rem;
+      font-weight: 750;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #4f6335;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3rem, 9vw, 7.2rem);
+      line-height: .92;
+      letter-spacing: -.055em;
+      font-weight: 500;
+      color: #2e3f28;
+      text-wrap: balance;
+    }
+
+    .intro-copy {
+      margin: 22px auto 30px;
+      max-width: 580px;
+      font-size: clamp(1rem, 2.4vw, 1.23rem);
+      line-height: 1.72;
+      color: #46503d;
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 21px;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid rgba(44,79,47,.35);
+      outline-offset: 4px;
+    }
+
+    .btn-primary {
+      color: #fffdf5;
+      background: #315b35;
+      box-shadow: 0 10px 25px rgba(39,80,44,.25);
+      font-weight: 720;
+    }
+
+    .btn-ghost {
+      color: #36543a;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(62,91,58,.18);
+      font-weight: 650;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0) scale(.98); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(36,58,34,.76);
+      font-size: .82rem;
+    }
+
+    .scroll-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .letter-section {
+      position: relative;
+      min-height: 100svh;
+      padding: clamp(76px, 12vw, 150px) 20px;
+      display: grid;
+      place-items: center;
+    }
+
+    .letter {
+      position: relative;
+      width: min(760px, 100%);
+      padding: clamp(30px, 7vw, 70px);
+      border-radius: 30px;
+      background: rgba(255, 252, 242, .89);
+      border: 1px solid rgba(102,93,61,.12);
+      box-shadow: 0 30px 90px rgba(36,53,31,.2);
+      overflow: hidden;
+    }
+
+    .letter::before {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      right: -74px;
+      top: -80px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,145,24,.2);
+      box-shadow: 0 0 0 22px rgba(196,145,24,.04), 0 0 0 46px rgba(196,145,24,.025);
+    }
+
+    .letter-kicker {
+      margin: 0 0 18px;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: #8b6a20;
+      font-weight: 800;
+    }
+
+    .letter h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 500;
+      margin: 0 0 30px;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      line-height: 1;
+      letter-spacing: -.035em;
+      color: #34412e;
+    }
+
+    .speech p {
+      margin: 0 0 1.2em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.08rem, 2.4vw, 1.28rem);
+      line-height: 1.82;
+      color: #3e4138;
+    }
+
+    .speech p:first-child::first-letter {
+      float: left;
+      font-size: 4rem;
+      line-height: .82;
+      padding: .1em .12em 0 0;
+      color: #b27a14;
+    }
+
+    .signature {
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(76,86,58,.15);
+      font-family: Georgia, "Times New Roman", serif;
+      color: #35422f;
+    }
+
+    .signature strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 1.35rem;
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .garden-section {
+      min-height: 100svh;
+      padding: clamp(88px, 12vw, 150px) 20px 120px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .garden-card {
+      width: min(720px, 100%);
+      padding: clamp(30px, 6vw, 62px);
+      border-radius: 36px;
+      background: rgba(31, 65, 38, .84);
+      color: #fff9e6;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 26px 90px rgba(21,47,28,.32);
+      backdrop-filter: blur(12px);
+    }
+
+    .garden-card h2 {
+      margin: 0 0 15px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .garden-card p {
+      margin: 0 auto 28px;
+      max-width: 560px;
+      color: rgba(255,250,230,.82);
+      line-height: 1.7;
+    }
+
+    .garden-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .garden-card .btn-primary {
+      color: #33442d;
+      background: #f8c642;
+      box-shadow: 0 12px 30px rgba(0,0,0,.16);
+    }
+
+    .garden-card .btn-ghost {
+      color: #fff9e9;
+      border-color: rgba(255,255,255,.2);
+      background: rgba(255,255,255,.09);
+    }
+
+    .final-line {
+      min-height: 70svh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 80px 20px 150px;
+    }
+
+    .final-inner {
+      width: min(850px, 100%);
+    }
+
+    .final-line h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.8rem, 8vw, 6.8rem);
+      line-height: .94;
+      font-weight: 500;
+      letter-spacing: -.05em;
+      color: #fff8df;
+      text-shadow: 0 10px 36px rgba(45,66,37,.3);
+    }
+
+    .final-line p {
+      color: rgba(255,255,255,.86);
+      margin: 20px 0 0;
+      font-size: 1.05rem;
+    }
+
+    .planted {
+      position: fixed;
+      width: 68px;
+      height: 68px;
+      z-index: 15;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .planted .flower-head { transform: scale(.01); }
+
+    .petal-pop {
+      position: fixed;
+      width: 12px;
+      height: 22px;
+      z-index: 30;
+      border-radius: 80% 80% 50% 50%;
+      pointer-events: none;
+      background: linear-gradient(90deg, #e4a71e, #ffd75b);
+      transform-origin: 50% 100%;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 40;
+      transform: translate(-50%, 120px);
+      padding: 12px 17px;
+      border-radius: 999px;
+      background: rgba(27, 58, 33, .9);
+      color: #fff8dd;
+      box-shadow: 0 14px 35px rgba(0,0,0,.2);
+      font-size: .9rem;
+      pointer-events: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 12px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-180%);
+      background: #fff;
+      color: #223824;
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    @media (max-width: 640px) {
+      .intro-card { border-radius: 28px; }
+      .letter { border-radius: 25px; }
+      .scroll-hint { display: none; }
+      .sunflower { --stem-h: 145px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#carta">Ir al mensaje</a>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="scene" aria-hidden="true">
+    <div class="sky-glow"></div>
+    <div class="cloud cloud-a"></div>
+    <div class="cloud cloud-b"></div>
+    <div class="hill hill-back"></div>
+    <div class="hill hill-front"></div>
+    <div class="field" id="field"></div>
+  </div>
+
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <div class="intro-card">
+        <p class="eyebrow">11 de septiembre · Día del Maestro</p>
+        <h1 id="title">Feliz día,<br>seño Agus</h1>
+        <p class="intro-copy">
+          Te hice este rinconcito porque hay cosas que merecen algo más que un mensaje rápido. Tocá los girasoles, movete por el campo y, cuando quieras, abrí la carta.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#carta" id="openLetter">Abrir mi carta</a>
+          <button class="btn btn-ghost" type="button" id="bloomButton">Hacer florecer el campo</button>
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true">
+        <span class="scroll-dot"></span>
+        <span>seguí bajando</span>
+      </div>
+    </section>
+
+    <section class="letter-section" id="carta" aria-labelledby="letterTitle">
+      <article class="letter">
+        <p class="letter-kicker">Para mi hermana</p>
+        <h2 id="letterTitle">Agus, hoy quería decirte esto.</h2>
+        <div class="speech">
+          <p>Feliz día, seño Agus.</p>
+
+          <p>Capaz yo no vea todos los días lo que pasa dentro de tu aula, pero sí conozco a la persona que entra ahí. Y sé que enseñar no es solamente explicar algo hasta que alguien lo entienda. Es tener paciencia, volver a empezar, acompañar, prestar atención a quien no dice nada y, muchas veces, dar más de uno mismo de lo que los demás llegan a notar.</p>
+
+          <p>Por eso hoy no quería felicitarte solamente por ser maestra. Quería felicitarte por la clase de maestra que elegís ser cada vez que un chico necesita que alguien crea en él, lo escuche o le haga sentir que puede.</p>
+
+          <p>Me pone feliz verte construir tu propio camino y saber que, de alguna manera, una parte tuya va quedando en cada alumno que pasa por tu vida. Quizás ellos hoy no alcancen a dimensionarlo, pero hay palabras, gestos y personas que uno recuerda muchos años después. Estoy seguro de que para más de uno vos vas a ser una de esas personas.</p>
+
+          <p>Ojalá nunca pierdas esa sensibilidad que tenés, ni las ganas de hacer las cosas con amor incluso cuando estás cansada. Y cuando algún día dudes de si lo estás haciendo bien, acordate de todo lo que significa que una persona confíe en vos para aprender, crecer y sentirse un poquito más segura del mundo.</p>
+
+          <p>Estoy orgulloso de vos, Agus. No solo por tu profesión, sino por la mujer que sos detrás de ella.</p>
+
+          <p>Que tengas un día hermoso. Te quiero muchísimo.</p>
+        </div>
+        <div class="signature">
+          Con amor,
+          <strong>tu hermano, Damián.</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="garden-section" aria-labelledby="gardenTitle">
+      <div class="garden-card">
+        <h2 id="gardenTitle">Un girasol por cada huellita.</h2>
+        <p>
+          Hay personas que enseñan mirando al frente y otras que, además, dejan luz cuando pasan. Esta parte es para jugar un rato: podés seguir plantando girasoles donde quieras.
+        </p>
+        <div class="garden-actions">
+          <button class="btn btn-primary" type="button" id="plantButton">Sembrar un girasol</button>
+          <button class="btn btn-ghost" type="button" id="surpriseButton">Una última sorpresa</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-line" aria-label="Mensaje final">
+      <div class="final-inner">
+        <h2>Que nunca te falten motivos para seguir sembrando.</h2>
+        <p>Feliz Día del Maestro, Agus.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Girasol plantado para Agus.</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script>
+    (() => {
+      const field = document.querySelector('#field');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const canAnimate = typeof window.gsap !== 'undefined' && !reduceMotion;
+      const phrases = [
+        'Por tu paciencia.',
+        'Por cada alumno que acompañás.',
+        'Por enseñar con el corazón.',
+        'Por no rendirte con nadie.',
+        'Por hacer lugar para aprender.',
+        'Por la seño que elegís ser.'
+      ];
+
+      const makePetals = (head, count = 16) => {
+        for (let i = 0; i < count; i += 1) {
+          const petal = document.createElement('span');
+          petal.className = 'petal';
+          petal.style.transform = `rotate(${(360 / count) * i}deg) scale(${0.92 + Math.random() * 0.16})`;
+          head.appendChild(petal);
+        }
+      };
+
+      const makeSunflower = ({ x, bottom, scale, depth, planted = false }) => {
+        const flower = document.createElement('div');
+        flower.className = planted ? 'planted' : 'sunflower';
+        flower.dataset.depth = depth ?? 1;
+
+        if (!planted) {
+          flower.style.left = `${x}%`;
+          flower.style.bottom = `${bottom}px`;
+          flower.style.setProperty('--scale', scale);
+          flower.style.setProperty('--stem-h', `${140 + Math.round(Math.random() * 90)}px`);
+        }
+
+        const stem = document.createElement('div');
+        stem.className = 'stem';
+        const leafL = document.createElement('span');
+        leafL.className = 'leaf left';
+        const leafR = document.createElement('span');
+        leafR.className = 'leaf right';
+        stem.append(leafL, leafR);
+
+        const head = document.createElement('div');
+        head.className = 'flower-head';
+        makePetals(head);
+        const center = document.createElement('span');
+        center.className = 'flower-center';
+        head.appendChild(center);
+
+        if (!planted) flower.append(stem, head);
+        else flower.append(head);
+
+        return flower;
+      };
+
+      const populateField = () => {
+        const width = window.innerWidth;
+        const total = width < 640 ? 28 : width < 1000 ? 42 : 58;
+        const frag = document.createDocumentFragment();
+
+        for (let i = 0; i < total; i += 1) {
+          const depth = Math.random();
+          const scale = 0.42 + depth * 0.88;
+          const bottom = -18 + depth * 90 + Math.random() * 22;
+          const x = -3 + Math.random() * 106;
+          frag.appendChild(makeSunflower({ x, bottom, scale, depth }));
+        }
+
+        field.replaceChildren(frag);
+      };
+
+      populateField();
+
+      if (canAnimate) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.set('.intro-card', { autoAlpha: 0, y: 28, scale: .985 });
+        gsap.set('.intro-card > *', { autoAlpha: 0, y: 18 });
+
+        const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        introTl
+          .to('.intro-card', { autoAlpha: 1, y: 0, scale: 1, duration: 1.15 })
+          .to('.intro-card > *', { autoAlpha: 1, y: 0, duration: .72, stagger: .09 }, '-=.72')
+          .from('.scroll-hint', { autoAlpha: 0, y: 8, duration: .6 }, '-=.25');
+
+        gsap.to('.scroll-dot', { y: 5, duration: .8, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+        gsap.to('.cloud-a', { x: '18vw', duration: 28, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        gsap.to('.cloud-b', { x: '-16vw', duration: 35, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+        document.querySelectorAll('.sunflower').forEach((flower, index) => {
+          const stem = flower.querySelector('.stem');
+          const head = flower.querySelector('.flower-head');
+          const depth = Number(flower.dataset.depth || 1);
+          const sway = 2.2 + depth * 3.8;
+
+          gsap.to(flower, {
+            rotation: gsap.utils.random(-sway, sway),
+            duration: gsap.utils.random(2.7, 5.2),
+            transformOrigin: '50% 100%',
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            delay: index * .025
+          });
+
+          gsap.to(head, {
+            rotation: 360,
+            duration: gsap.utils.random(24, 42),
+            repeat: -1,
+            ease: 'none'
+          });
+
+          gsap.from(stem, {
+            scaleY: .12,
+            transformOrigin: '50% 100%',
+            duration: 1.3 + depth,
+            ease: 'power3.out',
+            delay: .15 + index * .012
+          });
+        });
+
+        gsap.from('.letter', {
+          scrollTrigger: { trigger: '.letter', start: 'top 78%', once: true },
+          y: 60,
+          autoAlpha: 0,
+          rotateX: 4,
+          transformOrigin: '50% 0%',
+          duration: 1.1,
+          ease: 'power3.out'
+        });
+
+        gsap.from('.speech p', {
+          scrollTrigger: { trigger: '.speech', start: 'top 72%', once: true },
+          y: 24,
+          autoAlpha: 0,
+          duration: .75,
+          stagger: .16,
+          ease: 'power2.out'
+        });
+
+        gsap.from('.garden-card', {
+          scrollTrigger: { trigger: '.garden-card', start: 'top 78%', once: true },
+          y: 44,
+          scale: .96,
+          autoAlpha: 0,
+          duration: 1,
+          ease: 'power3.out'
+        });
+
+        gsap.from('.final-line h2', {
+          scrollTrigger: { trigger: '.final-line', start: 'top 72%', once: true },
+          y: 45,
+          autoAlpha: 0,
+          duration: 1.2,
+          ease: 'power3.out'
+        });
+
+        gsap.to('.field', {
+          yPercent: -5,
+          scale: 1.035,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: 'main',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1.2
+          }
+        });
+
+        window.addEventListener('pointermove', (event) => {
+          const nx = event.clientX / window.innerWidth - .5;
+          const ny = event.clientY / window.innerHeight - .5;
+          gsap.to('.field', { x: nx * -18, rotation: nx * .45, duration: 1.4, ease: 'power2.out', overwrite: 'auto' });
+          gsap.to('.sky-glow', { xPercent: -50 + nx * 1.8, y: ny * 8, duration: 1.6, ease: 'power2.out', overwrite: 'auto' });
+        }, { passive: true });
+      }
+
+      const bloomAll = () => {
+        const heads = [...document.querySelectorAll('.sunflower .flower-head')];
+        if (canAnimate) {
+          gsap.fromTo(heads,
+            { scale: .76 },
+            { scale: 1.08, duration: .36, stagger: { each: .012, from: 'random' }, yoyo: true, repeat: 1, ease: 'back.out(2)' }
+          );
+        }
+        showToast('El campo floreció para la seño Agus.');
+      };
+
+      const burstPetals = (x = window.innerWidth / 2, y = window.innerHeight / 2, amount = 22) => {
+        for (let i = 0; i < amount; i += 1) {
+          const petal = document.createElement('span');
+          petal.className = 'petal-pop';
+          petal.style.left = `${x}px`;
+          petal.style.top = `${y}px`;
+          document.body.appendChild(petal);
+
+          if (canAnimate) {
+            gsap.to(petal, {
+              x: gsap.utils.random(-190, 190),
+              y: gsap.utils.random(-240, 170),
+              rotation: gsap.utils.random(-540, 540),
+              scale: gsap.utils.random(.55, 1.25),
+              autoAlpha: 0,
+              duration: gsap.utils.random(1.4, 2.4),
+              ease: 'power2.out',
+              onComplete: () => petal.remove()
+            });
+          } else {
+            setTimeout(() => petal.remove(), 900);
+          }
+        }
+      };
+
+      const plantAt = (x, y) => {
+        const flower = makeSunflower({ planted: true });
+        flower.style.left = `${x}px`;
+        flower.style.top = `${y}px`;
+        document.body.appendChild(flower);
+        const head = flower.querySelector('.flower-head');
+
+        if (canAnimate) {
+          gsap.fromTo(head,
+            { scale: .01, rotation: -40 },
+            { scale: 1, rotation: 0, duration: .72, ease: 'back.out(2)' }
+          );
+          gsap.to(flower, { y: -18, autoAlpha: 0, duration: 2.8, delay: 3.2, ease: 'power1.in', onComplete: () => flower.remove() });
+        } else {
+          head.style.transform = 'scale(1)';
+          setTimeout(() => flower.remove(), 4500);
+        }
+
+        burstPetals(x, y, 8);
+      };
+
+      let toastTimer;
+      const toast = document.querySelector('#toast');
+      const showToast = (message) => {
+        toast.textContent = message;
+        clearTimeout(toastTimer);
+        if (canAnimate) {
+          gsap.killTweensOf(toast);
+          gsap.to(toast, { y: -6, duration: .35, ease: 'power2.out' });
+          toastTimer = setTimeout(() => gsap.to(toast, { y: 120, duration: .45, ease: 'power2.in' }), 2200);
+        } else {
+          toast.style.transform = 'translate(-50%, -6px)';
+          toastTimer = setTimeout(() => toast.style.transform = 'translate(-50%, 120px)', 2200);
+        }
+      };
+
+      document.querySelector('#bloomButton').addEventListener('click', bloomAll);
+
+      document.querySelector('#plantButton').addEventListener('click', () => {
+        const x = window.innerWidth * (.25 + Math.random() * .5);
+        const y = window.innerHeight * (.28 + Math.random() * .4);
+        plantAt(x, y);
+        showToast(phrases[Math.floor(Math.random() * phrases.length)]);
+      });
+
+      document.querySelector('#surpriseButton').addEventListener('click', (event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        burstPetals(rect.left + rect.width / 2, rect.top + rect.height / 2, 42);
+        bloomAll();
+        showToast('Estoy orgulloso de vos, Agus. Te quiero muchísimo.');
+
+        if (canAnimate) {
+          gsap.to('.final-line h2', {
+            textShadow: '0 10px 44px rgba(255,216,107,.7)',
+            scale: 1.025,
+            duration: .45,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power2.out'
+          });
+          gsap.to(window, { scrollTo: 0, duration: 0 });
+        }
+      });
+
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('button, a, .letter')) return;
+        if (event.clientY < 80) return;
+        plantAt(event.clientX, event.clientY);
+      });
+
+      document.querySelectorAll('.sunflower').forEach((flower) => {
+        flower.addEventListener('pointerenter', () => {
+          if (canAnimate) gsap.to(flower.querySelector('.flower-head'), { scale: 1.12, duration: .3, ease: 'back.out(2)' });
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        clearTimeout(window.__sunflowerResizeTimer);
+        window.__sunflowerResizeTimer = setTimeout(() => {
+          if (Math.abs(window.innerWidth - (window.__lastFieldWidth || window.innerWidth)) > 180) populateField();
+          window.__lastFieldWidth = window.innerWidth;
+        }, 250);
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
