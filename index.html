@@ -31,7 +31,7 @@
     .rds-halo{position:absolute;right:-15vw;top:-23vh;width:min(83vw,1040px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,248,232,.7) 0%,rgba(254,214,4,.22) 32%,rgba(249,209,100,.08) 55%,transparent 73%);filter:blur(5px)}
     .rds-coral-glow{position:absolute;left:-13vw;top:38vh;width:min(52vw,680px);aspect-ratio:1;border-radius:52% 48% 58% 42%;background:radial-gradient(circle at 42% 40%,rgba(249,133,122,.11),transparent 67%);filter:blur(10px)}
     .rds-symbol-shell{position:absolute;right:-8vw;top:4vh;width:min(59vw,760px);aspect-ratio:1;display:grid;place-items:center;transform-origin:50% 50%;will-change:transform}
-    .rds-symbol{position:relative;z-index:2;display:block;width:73%;height:auto;opacity:.105;filter:none;transform-origin:50% 50%;will-change:transform}
+    .rds-symbol{position:relative;z-index:2;display:block;width:73%;height:auto;opacity:.14;filter:saturate(1.08) contrast(1.03);mix-blend-mode:multiply;transform-origin:50% 50%;will-change:transform;-webkit-mask-image:radial-gradient(ellipse 68% 68% at 50% 50%,#000 0 68%,rgba(0,0,0,.98) 76%,rgba(0,0,0,.72) 86%,transparent 100%);mask-image:radial-gradient(ellipse 68% 68% at 50% 50%,#000 0 68%,rgba(0,0,0,.98) 76%,rgba(0,0,0,.72) 86%,transparent 100%)}
     .rds-orbit{position:absolute;z-index:1;inset:9%;border:1px solid rgba(96,64,31,.14);border-radius:50%;transform:rotate(-18deg) scaleY(.68);transform-origin:50% 50%;will-change:transform}
     .rds-orbit-b{inset:1%;border-color:rgba(244,149,32,.16);transform:rotate(27deg) scaleY(.82)}
     .rds-seed{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--rds-orange);opacity:.48;box-shadow:0 0 0 7px rgba(254,214,4,.06),0 0 22px rgba(244,149,32,.16);will-change:transform}
@@ -84,7 +84,7 @@
 
     @media(max-width:640px){
       .hero-card,.garden-card{border-radius:27px}.letter{border-radius:24px}.hint{display:none}.sunflower{--stem:145px}
-      .rds-symbol-shell{right:-31vw;top:8vh;width:96vw}.rds-symbol{opacity:.085;width:76%}.rds-orbit-b{display:none}.rds-coral-glow{left:-35vw;top:43vh;width:88vw}.rds-halo{right:-42vw;top:-9vh;width:128vw}.rds-seed.s3,.rds-seed.s4{display:none}.hero:before{width:118vw;height:72vw;opacity:.65}.letter-wrap:before{right:-55vw;width:115vw}
+      .rds-symbol-shell{right:-31vw;top:8vh;width:96vw}.rds-symbol{opacity:.11;width:76%}.rds-orbit-b{display:none}.rds-coral-glow{left:-35vw;top:43vh;width:88vw}.rds-halo{right:-42vw;top:-9vh;width:128vw}.rds-seed.s3,.rds-seed.s4{display:none}.hero:before{width:118vw;height:72vw;opacity:.65}.letter-wrap:before{right:-55vw;width:115vw}
     }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
   </style>
@@ -196,7 +196,7 @@
 
       let toastTimer;const toast=document.querySelector('#toast');
       function notify(msg){toast.textContent=msg;clearTimeout(toastTimer);if(motion){gsap.killTweensOf(toast);gsap.to(toast,{y:-6,duration:.32,ease:'power2.out'});toastTimer=setTimeout(()=>gsap.to(toast,{y:120,duration:.42,ease:'power2.in'}),2300)}else{toast.style.transform='translate(-50%,-6px)';toastTimer=setTimeout(()=>toast.style.transform='translate(-50%,120px)',2300)}}
-      function brandPulse(strong=false){if(!motion)return;gsap.fromTo('.rds-symbol',{scale:1,opacity:.105},{scale:strong?1.07:1.035,opacity:strong?.17:.145,duration:.42,yoyo:true,repeat:1,ease:'sine.inOut',overwrite:'auto'});gsap.fromTo('.rds-halo',{scale:1,opacity:1},{scale:strong?1.08:1.035,opacity:strong?1.28:1.15,duration:.6,yoyo:true,repeat:1,ease:'power2.out',overwrite:'auto'})}
+      function brandPulse(strong=false){if(!motion)return;gsap.fromTo('.rds-symbol',{scale:1,opacity:.14},{scale:strong?1.07:1.035,opacity:strong?.22:.18,duration:.42,yoyo:true,repeat:1,ease:'sine.inOut',overwrite:'auto'});gsap.fromTo('.rds-halo',{scale:1,opacity:1},{scale:strong?1.08:1.035,opacity:strong?1.28:1.15,duration:.6,yoyo:true,repeat:1,ease:'power2.out',overwrite:'auto'})}
       function burst(x=innerWidth/2,y=innerHeight/2,n=20){for(let i=0;i<n;i++){const p=document.createElement('span');p.className='petal-pop';p.style.left=x+'px';p.style.top=y+'px';document.body.append(p);if(motion)gsap.to(p,{x:gsap.utils.random(-190,190),y:gsap.utils.random(-240,170),rotation:gsap.utils.random(-540,540),scale:gsap.utils.random(.55,1.25),autoAlpha:0,duration:gsap.utils.random(1.4,2.3),ease:'power2.out',onComplete:()=>p.remove()});else setTimeout(()=>p.remove(),900)}}
       function plantAt(x,y){const f=flower({planted:true});f.style.left=x+'px';f.style.top=y+'px';document.body.append(f);const h=f.querySelector('.head');if(motion){gsap.fromTo(h,{scale:.01,rotation:-40},{scale:1,rotation:0,duration:.7,ease:'back.out(2)'});gsap.to(f,{y:-18,autoAlpha:0,duration:2.6,delay:3.2,ease:'power1.in',onComplete:()=>f.remove()})}else{h.style.transform='scale(1)';setTimeout(()=>f.remove(),4500)}burst(x,y,8)}
       function bloom(){const heads=[...document.querySelectorAll('.sunflower .head')];if(motion)gsap.fromTo(heads,{scale:.76},{scale:1.09,duration:.34,stagger:{each:.012,from:'random'},yoyo:true,repeat:1,ease:'back.out(2)'});brandPulse(false);notify('El campo floreció para la seño Agus.')}
