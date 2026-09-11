@@ -37,6 +37,9 @@ jobs:
           tags = [
               '  <script src="./assets/sprint-7.js"></script>\n',
               '  <script src="./assets/visual-pass-2.js"></script>\n',
+              '  <script src="./assets/visual-pass-3-atmosphere.js"></script>\n',
+              '  <script src="./assets/visual-pass-3-depth.js"></script>\n',
+              '  <script src="./assets/visual-pass-3-finale.js"></script>\n',
           ]
           for tag in tags:
               src = tag.split('src="', 1)[1].split('"', 1)[0]
